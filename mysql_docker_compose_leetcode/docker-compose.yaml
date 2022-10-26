@@ -1,0 +1,32 @@
+version: '3'
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:5.6.38
+    restart: always
+    ports:
+    - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+    networks:
+    - my-network
+  mysql-threads:
+    container_name: mysql-threads
+    #image: harbor.intra.com/baseimages/mysql-threads:v12
+    image: ssslkj/mysql-threads:v1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      MYSQL_IP: "mysql"
+      MYSQL_PORT: "3306"
+      MYSQL_PASSWD: "root123"
+    volumes:
+    - /tmp/data:/data 
+    networks:
+    - my-network
+networks:
+  my-network:
+    driver: bridge
+#MYSQL_IP: "192.168.31.104"
